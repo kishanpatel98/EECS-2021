@@ -1,4 +1,0 @@
-ori x8, x0, 12
-ori x7, x0, 1536
-or x9, x7, x8
-xori x10, x9, 255
