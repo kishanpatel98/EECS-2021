@@ -1,0 +1,31 @@
+main: 		addi 	x5, x0, 5		# Assignment 1 - 5%
+		addi    x6, x0, 0       # Assignment 2 - 5%
+		addi    x7, x0, 10      # Assignment 3 - 10%
+		addi    x8, x0, 0       # Midterm Exam - 20%
+		addi	x9, x0, 20      # Project      - 20%
+		addi 	x10,x0, 40		# Final Exam   - 40%
+
+
+		beq	x5, x0, OPTION1 	# Assignment 1 = 0%
+		beq 	x6, x0, OPTION2 	# Assignment 2 = 0%
+
+midterm:		beq	x8, x0, OPTION3	 #	Midterm   = 0%
+		jal 	x0, Exit		 # Exit
+
+OPTION1:		addi	x6, x6, 5        # Add 5% to Assignment2
+		addi    x2, x2, 22
+		beq     x0, x0, midterm 			 
+
+OPTION2:		addi	x5, x5, 5		# Add 5% to Assignment 1
+		addi	x2, x2, 22
+		beq 	x0, x0, midterm
+
+OPTION3: 		addi	x10, x10, 20		# Add 20% to Final Exam
+		addi 	x2, x2, 33
+		jal 	x0, Exit
+
+Exit:		add x11, x5, x6
+		add x11, x11, x7
+		add x11, x11, x8
+		add x11, x11, x9
+		add x11, x11, x10

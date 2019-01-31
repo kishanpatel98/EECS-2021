@@ -1,0 +1,17 @@
+main:       		ecall x19, x0, 5
+      		addi x20, x0, 0 
+      
+		blt x0, x19, Positive
+
+Negative:       beq x19, x0, Exit 
+         		add x20, x20, x19 
+          		addi x19, x19, 1 
+          		bne x19, x0, Negative
+
+
+Positive:     		beq x19, x0, Exit 
+           		add x20, x20, x19 
+           		addi x19, x19, -1 
+           		bne x19, x0, Positive
+
+Exit:
