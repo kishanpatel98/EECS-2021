@@ -1,1 +1,15 @@
-test
+main:	addi x2, x0, 1600
+	ecall x6, x0, 5
+	add x10, x6, x0
+	addi x2, x3, -8
+	sd x6, 0(x2)
+	jal x1, myswap
+	ld x6, 0(x2)
+	addi x2, x2, 8
+	ecall x0, x10, 2
+	ecall x0, x6, 2
+	
+	org 96
+myswap:	addi x2, x2, -8
+	
+	
