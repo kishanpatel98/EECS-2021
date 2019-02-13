@@ -1,0 +1,483 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage{listings}
+\usepackage{color}
+\usepackage{../mips}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Verilog,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  captionpos=b,                   % sets the caption-position to bottom
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
+}
+
+\lstdefinestyle{Assembly}{ %
+  language=[mips]Assembler,       % the language of the code
+  basicstyle={\small\ttfamily},       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\footnotesize\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=tb,                       % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=4,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+\newenvironment{statement}{\par\vspace{50ex}}{\clearpage}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+% Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+\renewcommand{\labelenumi}{\alph{enumi}.}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{\textsc{Lab M} \\ Building the CPU } % Title
+
+\author{\textsc{Mohammadamin Bandali}} % Author name
+
+\date{} % no date
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\begin{center}
+\begin{tabular}{l r}
+Student Number: & XXXXXXXXX \\ 
+Date Performed: & April 7, 2015 \\ % Date the experiment was performed
+Lab Location: & Lassonde 1006 \\ 
+Course Name: & Computer Organization \\ 
+Course Code: & EECS 2021 \\ 
+Course Section: & Z, Lab-02\\ 
+Instructor: & Professor Peter Lian % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+\begin{statement}
+“The work in this report is my own. I have read and understood York University
+academic honesty guidelines and I did not violate Senate Policy on Academic
+Honesty in writing this report.”
+\end{statement}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+
+The purpose of this lab is to gain familiarity with sequential components, by
+using a set of pre-made modules from a ready-made library. Namely,
+\textit{registers}, \textit{register files} and \textit{memory} blocks. \newline
+
+After using each module in a simple program, we will then use them to implement
+the 5 stages,
+
+\begin{enumerate}
+\item[1. ] Instruction Fetch
+\item[2. ] Instruction Decoding
+\item[3. ] Execution
+\item[4. ] Data Memory
+\item[5. ] Write Back
+\end{enumerate}
+
+Having implemented the circuits for each stage, they nicely fit together like a jigsaw
+puzzle to build our datapath (without a control unit).
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Methods and Equipment}
+
+\begin{center}
+\begin{tabular}{l r}
+Computer: & MacBook Air 13-inch, Mid 2013 \\
+CPU: & 1.7GHz dual-core Intel Core i7 \\
+RAM: & 8GB 1600MHz LPDDR3 \\
+Operating System: & Arch GNU/Linux \\
+Kernel Version: & 3.17.6
+\end{tabular}
+\end{center}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Experimental Procedure and Results}
+
+\subsection{LabM1}
+\begin{enumerate}
+\item[4. ] The first \verb#$display# statement will show an unknown value
+(i.e. \verb$x$) for \verb$z$, because the clock is 0 and the register hasn't
+stored the value of \verb$d$. In the second output, \verb$z$ will be set to
+\verb$d$, ($= 20$) since the clock is 1 and the register changes on the rising
+edge. The third output, \verb$z$ is still 20, since it's the falling edge of the
+clock. Finally, the last output will be a new value of z ($= 30$) since the clock
+is on the rising edge.
+
+\pagebreak
+
+\item[5. ] The register works as expected, ignoring the input when \verb$enabled=0$
+and storing them (on the rising edges of the clock) when \verb$enabled=1$:
+\begin{verbatim}
+$ vvp a.out +enable=0
+clk=0 d=        15, z=         x
+clk=1 d=        20, z=         x
+clk=0 d=        25, z=         x
+clk=1 d=        30, z=         x
+
+$ vvp a.out +enable=1
+clk=0 d=        15, z=         x
+clk=1 d=        20, z=        20
+clk=0 d=        25, z=        20
+clk=1 d=        30, z=        30
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabM2}
+\begin{enumerate}
+\item[10. ] The register behaves as expected: Initially, the value is unknown,
+then at each rising edge the value is updated to the value of input \verb$d$.
+\begin{verbatim}
+$ vvp a.out +enable=1
+    0: clk=0,d=         x,z=         x,expect=         x
+    2: clk=0,d= 303379748,z=         x,expect=         x
+    4: clk=0,d=3230228097,z=         x,expect=         x
+    5: clk=1,d=3230228097,z=3230228097,expect=3230228097
+    6: clk=1,d=2223298057,z=3230228097,expect=3230228097
+    8: clk=1,d=2985317987,z=3230228097,expect=3230228097
+   10: clk=0,d= 112818957,z=3230228097,expect=3230228097
+   12: clk=0,d=1189058957,z=3230228097,expect=3230228097
+   14: clk=0,d=2999092325,z=3230228097,expect=3230228097
+   15: clk=1,d=2999092325,z=2999092325,expect=2999092325
+   16: clk=1,d=2302104082,z=2999092325,expect=2999092325
+   18: clk=1,d=  15983361,z=2999092325,expect=2999092325
+   20: clk=0,d= 114806029,z=2999092325,expect=2999092325
+   22: clk=0,d= 992211318,z=2999092325,expect=2999092325
+   24: clk=0,d= 512609597,z=2999092325,expect=2999092325
+   25: clk=1,d= 512609597,z= 512609597,expect= 512609597
+   26: clk=1,d=1993627629,z= 512609597,expect= 512609597
+   28: clk=1,d=1177417612,z= 512609597,expect= 512609597
+   30: clk=0,d=2097015289,z= 512609597,expect= 512609597
+   32: clk=0,d=3812041926,z= 512609597,expect= 512609597
+   34: clk=0,d=3807872197,z= 512609597,expect= 512609597
+   35: clk=1,d=3807872197,z=3807872197,expect=3807872197
+   36: clk=1,d=3574846122,z=3807872197,expect=3807872197
+   38: clk=1,d=1924134885,z=3807872197,expect=3807872197
+   40: clk=0,d=3151131255,z=3807872197,expect=3807872197
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabM3}
+\begin{enumerate}
+\item[14. ] The output of the program with \verb$w$ set:
+\begin{verbatim}
+$ vvp a.out +w=1
+rn1= 4,rd1=        16  rn2= 1,rd2=         1
+rn1= 9,rd1=        81  rn2= 3,rd2=         9
+rn1=13,rd1=       169  rn2=13,rd2=       169
+rn1= 5,rd1=        25  rn2=18,rd2=       324
+rn1= 1,rd1=         1  rn2=13,rd2=       169
+rn1=22,rd1=       484  rn2=29,rd2=       841
+rn1=13,rd1=       169  rn2=12,rd2=       144
+rn1=25,rd1=       625  rn2= 6,rd2=        36
+rn1= 5,rd1=        25  rn2=10,rd2=       100
+rn1= 5,rd1=        25  rn2=23,rd2=       529
+\end{verbatim}
+  We can see that each register value is the square of its register
+number, as we intended. Therefore the program is working correctly.
+
+\item[15. ] With \verb$w$ cleared, nothing is stored in the registers,
+therefore the value of each one will be unknown (\verb$x$):
+\begin{verbatim}
+$ vvp a.out +w=0
+rn1= 4,rd1=         x  rn2= 1,rd2=         x
+rn1= 9,rd1=         x  rn2= 3,rd2=         x
+rn1=13,rd1=         x  rn2=13,rd2=         x
+rn1= 5,rd1=         x  rn2=18,rd2=         x
+rn1= 1,rd1=         x  rn2=13,rd2=         x
+rn1=22,rd1=         x  rn2=29,rd2=         x
+rn1=13,rd1=         x  rn2=12,rd2=         x
+rn1=25,rd1=         x  rn2= 6,rd2=         x
+rn1= 5,rd1=         x  rn2=10,rd2=         x
+rn1= 5,rd1=         x  rn2=23,rd2=         x
+\end{verbatim}
+The output verifies that the register file behaves as expected.
+\end{enumerate}
+
+\subsection{LabM4}
+\begin{enumerate}
+\item[20. ] The content of the memory at address 16 should be 12345678 (hex),
+at 20 should be unknown (since we didn't write to that address);
+and at 24 should be 89abcdef (hex).
+
+\pagebreak
+
+\item[21. ] The output matches our prediction:
+\begin{verbatim}
+$ vvp a.out
+ERROR: ../hrLib/mem.v:22: $readmemh: Unable to open ram.dat
+ for reading.
+Address         16 contains 12345678
+Address         20 contains xxxxxxxx
+Address         24 contains 89abcdef
+\end{verbatim}
+  Therefore the program behaves as expected.
+
+\item[22. ] According to the lab manual (see '$17$ above') attempting to
+read / write using a non-word address should display an "unaligned address"
+error; but this was not the case. \newline
+
+Looking at the source code for the memory module on a lab machine at
+\begin{verbatim}
+/cs/fac/pkg/verimips/hrLib/mem.v
+\end{verbatim}
+shows that the corresponding lines (line $29$ for \verb$read$ and
+$50$ for \verb$write$) for displaying the error were commented out. \newline
+
+So, no error is displayed when using an unaligned address, but here's what
+happens instead:
+
+\begin{itemize}
+\item read: \verb$memOut$ is set to \verb$32'hxxxxxxxx$ (a 32-bit \textit{unknown}).
+\item write: no action is taken.
+\end{itemize}
+\end{enumerate}
+
+\subsection{LabM5}
+\begin{enumerate}
+\item[28. ] LabM5 outputs the program (\verb$ram.dat$) in machine language:
+\begin{verbatim}
+Address 00000080 contains 00006820
+Address 00000084 contains 00008020
+Address 00000088 contains 00002020
+Address 0000008c contains 8da80050
+Address 00000090 contains 11000004
+Address 00000094 contains 02088020
+Address 00000098 contains 00882025
+Address 0000009c contains 21ad0004
+Address 000000a0 contains 08000023
+Address 000000a4 contains ac100020
+Address 000000a8 contains ac040024
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabM6}
+\begin{enumerate}
+\item[29. ] LabM6 produces the correct output, the memory content in an
+instruction-aware format:
+\begin{verbatim}
+0 0 0 13 32
+0 0 0 16 32
+0 0 0 4 32
+35 13 8 80
+4 8 0 4
+0 16 8 16 32
+0 4 8 4 37
+8 13 13 4
+2 35
+43 0 16 32
+43 0 4 36
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabM7}
+\begin{enumerate}
+\item[35. ] The output is the instructions in our \verb$ram.dat$ file:
+\begin{verbatim}
+instruction = 00006820
+instruction = 00008020
+instruction = 00002020
+instruction = 8da80050
+instruction = 11000004
+instruction = 02088020
+instruction = 00882025
+instruction = 21ad0004
+instruction = 08000023
+instruction = ac100020
+instruction = ac040024
+\end{verbatim}
+\end{enumerate}
+
+\pagebreak
+
+\subsection{LabM8}
+\begin{enumerate}
+\item[50. ] The output of LabM8:
+\begin{verbatim}
+00006820: rd1= 0 rd2= 0 imm=00006820 jTarget=0006820 z= 0 zero=1
+00008020: rd1= 0 rd2= 0 imm=ffff8020 jTarget=0008020 z= 0 zero=1
+00002020: rd1= 0 rd2= 0 imm=00002020 jTarget=0002020 z= 0 zero=1
+8da80050: rd1= 0 rd2= x imm=00000050 jTarget=1a80050 z=80 zero=0
+11000004: rd1=80 rd2= 0 imm=00000004 jTarget=1000004 z=84 zero=0
+02088020: rd1= 0 rd2=80 imm=ffff8020 jTarget=2088020 z=80 zero=0
+00882025: rd1= 0 rd2=80 imm=00002025 jTarget=0882025 z=80 zero=0
+21ad0004: rd1= 0 rd2= 0 imm=00000004 jTarget=1ad0004 z= 4 zero=0
+08000023: rd1= 0 rd2= 0 imm=00000023 jTarget=0000023 z=35 zero=0
+ac100020: rd1= 0 rd2=80 imm=00000020 jTarget=0100020 z=32 zero=0
+ac040024: rd1= 0 rd2=80 imm=00000024 jTarget=0040024 z=36 zero=0
+\end{verbatim}
+  Looking at each instruction they represent (in order): add, add, add, lw, beq,
+add, or, addi, j, sw, sw. We can see that each line is consistent with our
+datapath (looking at \verb$rd1$, \verb$rd2$, \verb$imm$ and \verb$z$).
+\end{enumerate}
+
+\subsection{LabM9}
+\begin{enumerate}
+\item[57. ] The output of LabM9 matches the given output in the lab manual:
+\begin{verbatim}
+00006820: rd1= 0 rd2= 0 z=  0 zero=1 wb= 0
+00008020: rd1= 0 rd2= 0 z=  0 zero=1 wb= 0
+00002020: rd1= 0 rd2= 0 z=  0 zero=1 wb= 0
+8da80050: rd1= 0 rd2= x z= 80 zero=0 wb= 1
+11000004: rd1= 1 rd2= 0 z=  1 zero=0 wb= 1
+02088020: rd1= 0 rd2= 1 z=  1 zero=0 wb= 1
+00882025: rd1= 0 rd2= 1 z=  1 zero=0 wb= 1
+21ad0004: rd1= 0 rd2= 0 z=  4 zero=0 wb= 4
+08000023: rd1= 0 rd2= 0 z= 35 zero=0 wb=35
+ac100020: rd1= 0 rd2= 1 z= 32 zero=0 wb=32
+ac040024: rd1= 0 rd2= 1 z= 36 zero=0 wb=36
+\end{verbatim}
+\end{enumerate}
+
+\pagebreak
+
+\subsection{LabM10}
+\begin{enumerate}
+\item[59. ] Previously, we were only going through the program once and basically
+treating each instruction equally when going to the next instruction (by 
+increasing the counter by 4). However, now determine the address of the next 
+instruction based on the instruction type:
+\begin{itemize}
+\item branches: we add $4 \times the\,immediate\,field$ to the next address.
+\item jumps: we directly jump to $4 \times jTarget$.
+\item otherwise, we proceed normally to the next instruction.
+\end{itemize}
+And thus we need to perform more steps than 11 to cover a complete execution
+of the program.
+
+\item[60. ] The last two lines of output match the expected output given in the
+lab manual:
+\begin{verbatim}
+ac100020: rd1= 0 rd2=36 z= 32 zero=0 wb=32
+ac040024: rd1= 0 rd2=15 z= 36 zero=0 wb=3
+\end{verbatim}
+\end{enumerate}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{Evaluations and Conclusions}
+
+Going through this lab was very challenging and especially time consuming.
+Doing each task requires a good grasp of the subject and the smallest misconceptions
+can cause a failure. \newline
+
+The outcome of this lab was gaining knowledge about and using sequential
+components and using them to build the pieces required for building a datapath
+for our CPU. \newline
+
+Whilst being difficult, doing the lab provided an enlightening experience on
+how programs and their data flow through the CPU, revealing the complexity and
+the numerous steps required for doing so. I never thought building a simple CPU
+currently capable of handling 1 simple program correctly, without even having
+a control unit, would be so difficult.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+
+\pagebreak
+
+\section{Source Codes}
+
+\subsection{LabM1}
+\lstinputlisting[language=verilog]{LabM1.v}
+
+\pagebreak
+
+\subsection{LabM2}
+\lstinputlisting[language=verilog]{LabM2.v}
+
+\pagebreak
+
+\subsection{LabM3}
+\lstinputlisting[language=verilog]{LabM3.v}
+
+\pagebreak
+
+\subsection{LabM4}
+\lstinputlisting[language=verilog]{LabM4.v}
+
+\subsection{LabM5}
+\lstinputlisting[language=verilog]{LabM5.v}
+\lstinputlisting[style=assembly]{LabM5.s}
+LabM5.s was loaded into spim to generate the machine encoding of each
+statement, used for writing the following \verb$ram.dat$ program:
+\pagebreak
+\lstinputlisting{ram.dat}
+
+\pagebreak
+
+\subsection{LabM6}
+\lstinputlisting[language=verilog]{LabM6.v}
+
+\subsection{LabM7}
+\lstinputlisting[language=verilog]{LabM7.v}
+
+\subsection{LabM8}
+\lstinputlisting[language=verilog]{LabM8.v}
+
+\subsection{LabM9}
+\lstinputlisting[language=verilog]{LabM9.v}
+
+\subsection{LabM10}
+\lstinputlisting[language=verilog]{LabM10.v}
+
+\subsection{CPU}
+\lstinputlisting[language=verilog]{cpu.v}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

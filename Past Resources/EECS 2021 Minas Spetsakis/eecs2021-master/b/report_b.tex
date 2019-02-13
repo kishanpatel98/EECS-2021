@@ -1,0 +1,413 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage{listings}
+\usepackage{color}
+\usepackage{../mips}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  captionpos=b,                   % sets the caption-position to bottom
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
+}
+
+\lstdefinestyle{Assembly}{ %
+  language=[mips]Assembler,       % the language of the code
+  basicstyle={\small\ttfamily},       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\footnotesize\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=tb,                       % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=4,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+\newenvironment{statement}{\par\vspace{50ex}}{\clearpage}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{\textsc{Lab B} \\ Translating Code to Assembly } % Title
+
+\author{\textsc{Mohammadamin Bandali}} % Author name
+
+\date{} % no date
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\begin{center}
+\begin{tabular}{l r}
+Student Number: & XXXXXXXXX \\ 
+Date Performed: & February 3, 2015 \\ % Date the experiment was performed
+Lab Location: & Lassonde 1006 \\ 
+Course Name: & Computer Organization \\ 
+Course Code: & EECS 2021 \\ 
+Course Section: & Z, Lab-02\\ 
+Instructor: & Professor Peter Lian % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+\begin{statement}
+“The work in this report is my own. I have read and understood York University
+academic honesty guidelines and I did not violate Senate Policy on Academic
+Honesty in writing this report.”
+\end{statement}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+
+The purpose of this lab is to become familiar with translation of code from higher level languages (like C or Java) to Assembly. The student is asked to perform translation or modification of multiple programs into Assembly. 
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Methods and Equipment}
+
+\begin{center}
+\begin{tabular}{l r}
+Computer: & MacBook Air 13-inch, Mid 2013 \\
+CPU: & 1.7GHz dual-core Intel Core i7 \\
+RAM: & 8GB 1600MHz LPDDR3 \\
+Operating System: & Arch GNU/Linux \\
+Kernel Version: & 3.17.6
+\end{tabular}
+\end{center}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Experimental Procedure and Results}
+
+\subsection{LabB1}
+\begin{enumerate}
+\item[6. ] The output of LabB1.s is: \verb$67$, and it makes sense, since we are adding 60 (t1) and 7 (t2) into t3, and then printing the result (t3).
+
+\item[10. ] There are \verb$6$ statements executed before the first statement of our program.
+
+\item[11. ] The value of \verb#$v0# immediately after the execution of our program is \verb$1$.
+\end{enumerate}
+
+\subsection{LabB2}
+No questions to answer in this subsection. Follow the instructions in the lab manual.
+
+\subsection{LabB3}
+\begin{enumerate}
+\item[17. ] The output will be the character \verb$C$, since \verb$67$ is the decimal representation of \verb$`C`$. (Look at the ASCII Table)\newline
+
+Also, verifying the output using our modified program:
+\begin{verbatim}
+% java LabB3
+C
+\end{verbatim}
+
+\item[20. ] The output of the Assembly program is the character \verb$C$, which matches the output of our modified java program to reflect the casting.
+\end{enumerate}
+
+\subsection{LabB4}
+\begin{enumerate}
+\item[21. ] The output is indeed the addition and subtraction of 60 and 7, separated by a space: \verb$67 53$
+\end{enumerate}
+
+\subsection{LabB5}
+\begin{enumerate}
+\item[23. ] After modifying the program to ask for the user input (for first number), given 60 as the input, the expected output is the addition of the input with 7, which would be 67.\newline The output of the program matches our predicted output: \verb$67$
+\end{enumerate}
+
+\subsection{LabB6}
+\begin{enumerate}
+\item[24. ] After implementing branching, the expected behaviour is to display the subtraction of the two numbers if they are different, or display their addition if they are the same (both \verb$7$).
+\newline
+\newline
+Testing our program:
+\newline
+\newline
+Input: 60 \newline
+Output: 53
+\newline
+\newline
+Input: 54 \newline
+Output: 47
+\newline
+\newline
+Input: 7 \newline
+Output: 14
+\newline
+\newline
+The outputs match our expectations: the first two are the subtraction \verb$input-7$ and the last one is the addition \verb$7+7$.
+\end{enumerate}
+
+\subsection{LabB7}
+\begin{enumerate}
+\item[25. ] After the modification, the expected behaviour is to display the addition of the first one is smaller, or display their subtraction if the first one is bigger. 
+\newline
+\newline
+Testing our program:
+\newline
+\newline
+Input: 4 \newline
+Output: 11
+\newline
+\newline
+Input: 9 \newline
+Output: 2
+\newline
+\newline
+Input: 7 \newline
+Output: 0
+\newline
+\newline
+The outputs match our expectations: the first test case, the input is smaller than 7, so it's addition, and the other two tests the input is \textbf{not} smaller than 7 (greater than or equal to), so subtraction is performed.
+\end{enumerate}
+
+\subsection{LabB8}
+\begin{enumerate}
+
+\item[26. ] The predicted output is \verb$01234$. The program will start with \verb#$a0=0# and display and increment it as long as it's smaller than 5. If \verb#$a0# is \textbf{not} less than 5 anymore, we jump to the end of program.
+
+\item[27. ] The output is \verb$01234$, which matches our prediction.
+\item[28. ] The output will be \verb$011111111$\ldots. In other words, the program will enter an infinite loop, since we will be adding 1 to 0 each time and saving it in \verb#$a0# (it won't change, and will always be 1).
+
+Single stepping would be absolutely useful in these type of situtation because it helps to see the program and registers at a discrete point in time, and in this case see that we are not in fact incrementing \verb#$a0#.
+\end{enumerate}
+
+\subsection{LabB9}
+\begin{enumerate}
+\item[29. ] For input \verb$9$ the output of the program is \verb$36$.
+\end{enumerate}
+
+\subsection{LabB10}
+\begin{enumerate}
+\item[30. ] The output of the program is \verb$8$ \verb$4$.\newline
+8 is the result of the integer division, and 4 is the remainder.
+The output makes sense since \verb$8*7+4=60$.
+\item[31. ] Now, in addition to the previous output (8 4), the program also outputs \verb$0420$ which is the result of multiplication 60 * 7.
+\end{enumerate}
+
+\subsection{LabB11}
+\begin{enumerate}
+\item[32. ] The output of the program is \verb$30$ \verb$120$.\newline
+
+When we shift 60 to the right by one, we are in fact dividing it by 2. Since in computers numbers are represented in binary (base 2), when we shift to right by one, we are decreasing the significance of all bits by one and in effect dividing the number by 2. So, we obtain \verb$30$.\newline
+
+When we shift 60 to the left by one, we are in fact multiplying it by 2. Since in computers numbers are represented in binary, when we shift to left by one, we are increasing the significance of all bits by one and in effect multiplying the number by 2. So, we obtain \verb$120$.\newline
+
+\item[33. ] After the right shift, \verb#$t0# holds \verb$3c$ and \verb#$a0# holds \verb$1e$. Each digit in hex represents four bits. So, \verb#$t0# is \verb$00111100$ and \verb#$a0# holds \verb$00011110$. Now we can easily see that shifting \verb$3c$ right by one yields \verb$1e$.
+
+\item[34. ] Changing the right shift value from 1 to 2, the program now divides 60 by $2^2$. So now, the output is \verb$15 120$.
+
+\item[35. ] After changing 60 to -60, The left shift still corresponds to multiplication by a power of two. So, shifting -60 left by one gives -120.
+
+\item[36. ] After changing 60 to -60, The right shift does \textbf{not} correspond to multiplication by a power of two anymore. According to observation, shifting -60 right by two results in 1073741809 (3ffffff1 hex).
+
+\item[37. ] The arithmetic right shift (sra) produces the correct result for both positive and negative numbers. 60 shifted right by two is 15 and -60 shifted right by two (arithmetically) is -15.
+\end{enumerate}
+
+\subsection{LabB12}
+\begin{enumerate}
+\item[38. ] Running the program with input 4 produces the output $72$, which makes sense since 4 * 18 = 72.
+
+\item[39. ] Shifting is faster than multiplying because shifting is a bit operation and can be done at the hardware level much faster than naive multiplication.
+\end{enumerate}
+
+\subsection{LabB13}
+\begin{enumerate}
+\item[41. ] The output for 1024 is 1, and that makes sense since $1024 = 2^{10}$ so its bit \#10 is 1. Also, testing the program with 512 the output is 0, and that's correct as well because $512 = 2^9$ and its bit \#10 is 0.
+\end{enumerate}
+
+\subsection{LabB14}
+\begin{enumerate}
+\item[43. ] The mask based approach produces the same result (same as Q41 results).
+
+\item[44. ] Yes, writing the mask in hex also works, since they are equivalent (the same number). I've submitted the code for this program with the mask \verb$0x400$ instead of \verb$1024$.
+\end{enumerate}
+
+\subsection{LabB15}
+\begin{enumerate}
+\item[47. ] The mask is $(FFFFFBFF)_{16}$.\newline
+
+For input $5000$, the output is $5000$. The number hasn't really changed since its bit \#10 is already 0:
+$(5000)_{10} = (1001110001000)_2$ \newline
+
+For input $6000$, the output is $4976$. Looking at the binary representations, this makes sense:\newline
+$(6000)_{10} = (1011101110000)_2$ \newline
+$(4976)_{10} = (1001101110000)_2$ \newline
+\end{enumerate}
+
+\subsection{LabB16}
+\begin{enumerate}
+\item[49. ] This alternative mask generation approach produces the same mask and the same results as Q47 (LabB15): For input $5000$ the output is $5000$, and for input $6000$ the output is $4976$.
+
+\end{enumerate}
+
+\subsection{LabB17}
+\begin{enumerate}
+\item[51. ] This yet another mask generation approach produces the same mask and the same results as Q47 (LabB15) and Q49 (LabB16): For input $5000$ the output is $5000$, and for input $6000$ the output is $4976$.
+
+\end{enumerate}
+
+\subsection{LabB18}
+\begin{enumerate}
+\item[53. ] This is basically what the definition of XOR is. Looking at the truth table of XOR, we see that whenever the two values are the same, (both 0 or both 1) the value of XOR will be 0, and whenever they are different (one 1 and one 0) XOR will be 1:
+\begin{displaymath}
+\begin{array}{|c|c|c|}
+\hline
+   P
+ & Q
+ & P \oplus Q \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0 \\
+\hline
+\end{array}
+\end{displaymath}
+
+\item[56. ] The program works as expected:\newline
+
+Input: 0 \newline
+Output: 1024
+\newline
+
+Input: 256 \newline
+Output: 1280
+\newline
+
+Input: 6000 \newline
+Output: 4976
+
+\end{enumerate}
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{Evaluations and Conclusions}
+I was able to successfully predict the outputs of the tasks in this lab.\newline
+
+Doing the \textit{numerous} exercises in this lab helped me learn how to read and understand Assembly code, translate programs in higher level languages into their Assembly alternative and most importantly write Assembly code from scratch by myself, which is very exciting to me since I'd never had exposure to such low level operations. Practicing single-stepping makes me better/faster in debugging by providing me insight on the state of code at a certain point in time. Also, writing in Assembly makes me appreciate my tools in higher level languages much more!
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+
+\section{Source Codes}
+
+
+\subsection{LabB1}
+\lstinputlisting[language=java]{LabB1.java}
+\lstinputlisting[style=assembly]{LabB1.s}
+\pagebreak
+
+\subsection{LabB2}
+\lstinputlisting[style=Assembly]{LabB2.s}
+
+\subsection{LabB3}
+\lstinputlisting[language=java]{LabB3.java}
+\lstinputlisting[style=assembly]{LabB3.s}
+
+\subsection{LabB4}
+\lstinputlisting[style=Assembly]{LabB4.s}
+
+\subsection{LabB5}
+\lstinputlisting[style=Assembly]{LabB5.s}
+
+\subsection{LabB6}
+\lstinputlisting[style=Assembly]{LabB6.s}
+
+\subsection{LabB7}
+\lstinputlisting[style=Assembly]{LabB7.s}
+
+\subsection{LabB8}
+\lstinputlisting[style=Assembly]{LabB8.s}
+
+\subsection{LabB9}
+\lstinputlisting[style=Assembly]{LabB9.s}
+\pagebreak
+
+\subsection{LabB10}
+\lstinputlisting[style=Assembly]{LabB10.s}
+\pagebreak
+
+\subsection{LabB11}
+\lstinputlisting[style=Assembly]{LabB11.s}
+
+\subsection{LabB12}
+\lstinputlisting[style=Assembly]{LabB12.s}
+\pagebreak
+
+\subsection{LabB13}
+\lstinputlisting[style=Assembly]{LabB13.s}
+
+\subsection{LabB14}
+\lstinputlisting[style=Assembly]{LabB14.s}
+\pagebreak
+
+\subsection{LabB15}
+\lstinputlisting[style=Assembly]{LabB15.s}
+
+\subsection{LabB16}
+\lstinputlisting[style=Assembly]{LabB16.s}
+\pagebreak
+
+\subsection{LabB17}
+\lstinputlisting[style=Assembly]{LabB17.s}
+
+\subsection{LabB18}
+\lstinputlisting[style=Assembly]{LabB18.s}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

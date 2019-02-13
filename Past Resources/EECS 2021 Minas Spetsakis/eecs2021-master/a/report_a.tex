@@ -1,0 +1,487 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
+}
+
+\newenvironment{statement}{\par\vspace{50ex}}{\clearpage}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{\textsc{Lab A} \\ Translating Data to Binary } % Title
+
+\author{\textsc{Mohammadamin Bandali}} % Author name
+
+\date{} % no date
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\begin{center}
+\begin{tabular}{l r}
+Student Number: & XXXXXXXXX \\ 
+Date Performed: & January 27, 2015 \\ % Date the experiment was performed
+Lab Location: & Lassonde 1006 \\ 
+Course Name: & Computer Organization \\ 
+Course Code: & EECS 2021 \\ 
+Course Section: & Z, Lab-02\\ 
+Instructor: & Professor Peter Lian % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+\begin{statement}
+“The work in this report is my own. I have read and understood York University
+academic honesty guidelines and I did not violate Senate Policy on Academic
+Honesty in writing this report.”
+\end{statement}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+
+The purpose of this lab is becoming familiar with representation and translation of data to binary. Tasks begin by simply asking to write a program to display the input integer in binary (base 2) and then introducing bitwise operators. The tasks then journey into more advanced material such as setting and clearing bits, swapping them, and finally representation negative numbers (and changing sign using Two's Complement).
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Methods and Equipment}
+
+\begin{center}
+\begin{tabular}{l r}
+Computer: & MacBook Air 13-inch, Mid 2013 \\
+CPU: & 1.7 dual-core Intel Core i7 \\
+RAM: & 8GB 1600MHz LPDDR3 \\
+Operating System: & Arch GNU/Linux \\
+Kernel Version: & 3.17.6
+\end{tabular}
+\end{center}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Experimental Procedure and Results}
+
+\subsection{LabA1}
+\begin{enumerate}
+\item[1. ] Write the Java app LabA1 that takes an \verb$int$ and uses the \verb$toBinaryString$ static method from the \verb$Integer$ class to display the binary representation of the input.
+
+\item[6. ] The predicted output with argument \verb$24$ is \verb$11000$ since $24 = 2^4 + 2^3$, and the respective bits are 1.
+Running the application with
+\begin{verbatim}
+% java LabA1 24
+\end{verbatim}
+yields the predicted result (\verb$24$). \newline
+{\it Note}: \verb$%$ indicates the system prompt.
+
+\item[7. ] Trying some even integers to verify that bit 0 of any even integer is 0:
+\begin{verbatim}
+% java LabA1 6
+110
+% java LabA1 10
+1010
+% java LabA1 184
+1011100
+\end{verbatim}
+
+\item[8. ] If the binary representation of an integer ends with 00 at the least significant end, we can conclude that the integer is divisible by 4 (similar to the case that ending with 0 means divisibility by 2). Verifying using the app:
+\begin{verbatim}
+% java LabA1 184
+1011100
+% java Lab A1 28
+11100
+\end{verbatim}
+
+\item[9. ] If the binary representation of the integer ends with 01, the integer will be of the form \verb$4n+5$. Verifying:
+\begin{verbatim}
+% java LabA1 5    # = 4*0 + 5
+101
+% java Lab A1 17  # = 4*3 + 5
+10001
+\end{verbatim}
+
+\end{enumerate}
+
+\subsection{LabA2}
+\begin{enumerate}
+\item[12. ] The output for \verb$205$ is \verb$0xCD$.
+\item[14. ] The output for \verb$195$ is \verb$0xC3$ and \verb$0xC3000000$ (the reverse).
+\item[16. ] The output for \verb$195$ is \verb$0xC3$, \verb$0xC3000000$ (the reverse) and \verb$0xC3000000$ (the byte level reverse).
+\end{enumerate}
+
+\subsection{LabA3}
+\begin{enumerate}
+\item[18. ] Predictions for \verb$x=205$ and \verb$y=38$:\newline\newline
+$x = 11001101$ \newline
+$y = 00100110$ \newline\newline
+The result of \verb$AND$ would be: if same bit in both numbers are one, the corresponding bit in the result will also be 1, else 0. \newline
+$x \& y = 100$ (4 decimal) \newline\newline
+The result of \verb$OR$ would be: if same bit in any of the numbers is one, the corresponding bit in the result will also be 1, else 0. \newline
+$x | y = 11101111$ (239 decimal) \newline\newline
+The result of \verb$XOR$ would be: if same bit in both numbers are not the same, the corresponding bit in the result will be 1, else 0. \newline
+$x \mathbin{\char`\^} y = 11101011$ (235 decimal) \newline\newline
+The result of \verb$NOT$ would be the reverse of each bit in string (0 becomes 1, 1 becomes 0). \newline
+$\sim x = 11111111111111111111111100110010$ (-206 decimal)
+\pagebreak
+
+\item[19. ] The output for \verb$x=205$ and \verb$y=38$ matches the predictions:\newline
+\begin{verbatim}
+% java LabA3 205 38
+x 11001101
+y 00100110
+x & y  100
+x | y  11101111
+x ^ y  11101011
+~x  11111111111111111111111100110010
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabA4}
+\begin{enumerate}
+\item[21. ] The shift operators indeed shift bits to left and right.
+\begin{verbatim}
+% java LabA4 4
+x  100
+x <<  1   1000
+x >>> 1   10
+x >>  1   10
+
+% java LabA4 90
+x  1011010
+x <<  1 10110100
+x >>> 1 101101
+x >>  1 101101
+\end{verbatim}
+
+\item[22. ] Shifting left by 1 multiplies the integer by 2. Shifting right by 1 divides the number by 2 (integer division).
+\begin{verbatim}
+% java LabA4 6
+x  110
+x <<  1   1100  (12 decimal)
+x >>> 1   11    (3 decimal)
+x >>  1   11    (3 decimal)
+
+% java LabA4 11
+x  1011
+x <<  1   10110 (22 decimal)
+x >>> 1   101   (5 decimal)
+x >>  1   101   (5 decimal)
+\end{verbatim}
+
+\item[24. ] Shifting left by 2 multiplies the integer by 4. Shifting right by 2 divides the number by 4 (integer division).
+\begin{verbatim}
+% java LabA4 28
+x  11100
+x <<  1   1110000 (112 decimal)
+x >>> 1   111     (7 decimal)
+x >>  1   111     (7 decimal)
+
+% java LabA4 13
+x  1101
+x <<  1   110100 (52 decimal)
+x >>> 1   11     (3 decimal)
+x >>  1   11     (3 decimal)
+\end{verbatim}
+
+\item[25. ] Shifting left by \verb$a$ multiplies the number by $2^a$. Shifting right by \verb$a$ divides the number by $2^a$.
+
+\end{enumerate}
+
+\subsection{LabA5}
+\begin{enumerate}
+\item[28. ] The results of the mask-based approach (y) and shift-based approach (z) are indeed the same:
+\begin{verbatim}
+% java LabA5 5000
+x 1001110001000
+z 0
+y 0
+
+% java LabA5 6000
+x 1011101110000
+z 1
+y 1
+\end{verbatim}
+\item[29. ] 1024 Indeed acts like a mask since $1024 = 10000000000$ (bit \#10 is 1) and we want the bit \#10, so we \verb$AND$ 1024 with the input. If bit \#10 of input is 1, the corresponding bit after \verb$AND$ will be 1, otherwise 0. Then, we discard the rest of bits by shifting.
+\end{enumerate}
+
+\subsection{LabA6}
+\begin{enumerate}
+\item[31. ] Sample runs of LabA6, setting bit \#10 and clearing bit \#11:
+\begin{verbatim}
+% java LabA6 6144
+1100000000000   (x)
+1110000000000   (bit #10 set)
+1010000000000   (bit #11 cleared)
+
+% java LabA6 4096
+1000000000000   (x)
+1010000000000   (bit #10 set)
+1010000000000   (bit #11 cleared
+
+% java LabA6 500
+111110100       (x)
+10111110100     (bit #10 set)
+10111110100     (bit #11 cleared)
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabA7}
+\begin{enumerate}
+\item[33. ] Sample runs of LabA7, swapping bit \#10 and bit \#20:
+\begin{verbatim}
+% java LabA7 7
+111
+111
+
+% java LabA7 1048594
+100000000000000010010
+10000010010
+
+% java LabA7 4096
+1000000000000
+1000000000000
+
+% java LabA7 1255
+10011100111
+100000000000011100111
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabA8}
+\begin{enumerate}
+
+\item[34. ] Output for \verb$-5$:
+\begin{verbatim}
+% java LabA8 -5
+11111111111111111111111111111011
+\end{verbatim}
+
+\item[36. ] Several test runs of LabA8:
+
+\begin{verbatim}
+% java LabA8 -5
+11111111111111111111111111111011
+5
+101
+
+% java LabA8 -11
+11111111111111111111111111110101
+11
+1011
+
+% java LabA8 -27
+11111111111111111111111111100101
+27
+11011
+
+% java LabA8 -193
+11111111111111111111111100111111
+193
+11000001
+\end{verbatim}
+We can observe that z is the positive version of the number. $1 + \sim x$ changes the sign (+ to - and - to +). This is due to the way signed numbers are represented (Two's Complement). By flipping the bits (what $\sim$ does) and adding 1.
+\end{enumerate}
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{Evaluations and Conclusions}
+I was able to successfully predict the outputs of the tasks in this assignment. This, in addition to grasping the material of the lab, gives me confidence and more knowledge about the more internals of how computers work. \newline
+
+Using the basic bitwise operations to use them for twiddling with bits (swap two bits, get the value of a bit, setting and clearing bits, ...) seemed difficult at first and took me a while to grasp understand the contest, but going through lab sections greatly helped me understand and sharpen my bit-working skills and gave me insight and a new way of looking at things I saw everyday but never thought could have such deep yet simple connections with each other.
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+
+\section{Source Codes}
+
+
+\subsection{LabA1.java}
+\begin{lstlisting}
+public class LabA1 {
+    public static void main(String[] args) {
+        System.out.println(Integer.toBinaryString(Integer.parseInt(args[0])));
+    }
+}
+\end{lstlisting}
+\pagebreak
+
+\subsection{LabA2.java}
+\begin{lstlisting}
+public class LabA2 {
+    public static void main(String[] args) {
+        System.out.println("0x" + Integer.toHexString(Integer.parseInt(args[0])).toUpperCase());
+        System.out.println("0x" + Integer.toHexString(Integer.reverse(Integer.parseInt(args[0]))).toUpperCase());
+        System.out.println("0x" + Integer.toHexString(Integer.reverseBytes(Integer.parseInt(args[0]))).toUpperCase());
+    }
+}
+\end{lstlisting}
+
+\subsection{LabA3.java}
+\begin{lstlisting}
+public class LabA3 {
+    public static void main(String[] args) {
+        int x = Integer.parseInt(args[0]);
+        int y = Integer.parseInt(args[1]);
+        
+        System.out.printf("x\t %s\n", Integer.toBinaryString(x));
+        System.out.printf("y\t %s\n", Integer.toBinaryString(y));
+        System.out.printf("x & y\t %d\t %s\n", x&y, Integer.toBinaryString(x&y));
+        System.out.printf("x | y\t %d\t %s\n", x|y, Integer.toBinaryString(x|y));
+        System.out.printf("x ^ y\t %d\t %s\n", x^y, Integer.toBinaryString(x^y));
+        System.out.printf("~x\t %d\t %s\n", ~x, Integer.toBinaryString(~x));
+    }
+}
+\end{lstlisting}
+\pagebreak
+
+\subsection{LabA4.java}
+\begin{lstlisting}
+public class LabA4 {
+    public static void main(String[] args) {
+        int x = Integer.parseInt(args[0]);
+        
+        System.out.println(Integer.toBinaryString(x));
+        
+        System.out.println();
+        System.out.println("One shifts:");
+        System.out.print(Integer.toBinaryString(x << 1) + " ");
+        System.out.println(x << 1);
+        System.out.print(Integer.toBinaryString(x >>> 1) + " ");
+        System.out.println(x >>> 1);
+        System.out.print(Integer.toBinaryString(x >> 1) + " ");
+        System.out.println(x >> 1);
+
+        System.out.println();
+        
+        System.out.println("Two shifts:");
+        System.out.print(Integer.toBinaryString(x << 2) + " ");
+        System.out.println(x << 2);
+        System.out.print(Integer.toBinaryString(x >>> 2) + " ");
+        System.out.println(x >>> 2);
+        System.out.print(Integer.toBinaryString(x >> 2) + " ");
+        System.out.println(x >> 2);
+
+    }
+}
+\end{lstlisting}
+
+\subsection{LabA5.java}
+\begin{lstlisting}
+public class LabA5 {
+    public static void main(String[] args) {
+        int x = Integer.parseInt(args[0]);
+        System.out.println(Integer.toBinaryString(x));
+        int z = x << 21;
+        z = z >>> 31;
+        System.out.println(Integer.toBinaryString(z));
+        int mask = 1024;
+        int y = x & mask;
+        y = y >> 10;
+        System.out.println(Integer.toBinaryString(y));
+    }
+} 
+\end{lstlisting}
+
+\subsection{LabA6.java}
+\begin{lstlisting}
+public class LabA6 {
+    public static void main(String[] args) {
+        int x = Integer.parseInt(args[0]);
+        System.out.println(Integer.toBinaryString(x) + "\t(x)");
+
+        // set the #10 bit
+        x |= 1 << 10;
+        System.out.println(Integer.toBinaryString(x) + "\t(bit #10 set)");
+
+        // clear the #11 bit
+        x &= ~(1 << 11);
+        System.out.println(Integer.toBinaryString(x) + "\t(bit #11 cleared)");
+    }
+}
+\end{lstlisting}
+
+\subsection{LabA7.java}
+\begin{lstlisting}
+public class LabA7 {
+    public static void main(String[] args) {
+        int x = Integer.parseInt(args[0]);
+        System.out.println(Integer.toBinaryString(x));
+
+        int y = x << 21;
+        y = y >>> 31; // get bit #10 of x
+
+        int z = x << 11;
+        z = z >>> 31; // get bit #20 of x
+
+        if (y == 1 && z == 0) {        // if bit #10 is 1 and bit #20 is 0
+            x |= (1 << 20);            // set bit #20
+            x &= ~(1 << 10);           // clear bit #10
+        } else if (y == 0 && z == 1) { // if bit #20 is 1 and bit #10 is 0
+            x |= (1 << 10);            // set bit #10th
+            x &= ~(1 << 20);           // clear bit #20
+        }
+
+        System.out.println(Integer.toBinaryString(x));
+    }
+}
+\end{lstlisting}
+
+\subsection{LabA8.java}
+\begin{lstlisting}
+public class LabA8 {
+    public static void main(String[] args) {
+        int x = Integer.parseInt(args[0]);
+        System.out.println(Integer.toBinaryString(x));
+
+        int z = 1 + ~x;
+        System.out.println(z);
+        System.out.println(Integer.toBinaryString(z));
+    }
+}
+\end{lstlisting}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

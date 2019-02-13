@@ -1,0 +1,334 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage{listings}
+\usepackage{color}
+\usepackage{../mips}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  captionpos=b,                   % sets the caption-position to bottom
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
+}
+
+\lstdefinestyle{Assembly}{ %
+  language=[mips]Assembler,       % the language of the code
+  basicstyle={\small\ttfamily},       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\footnotesize\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=tb,                       % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=4,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+\newenvironment{statement}{\par\vspace{50ex}}{\clearpage}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{\textsc{Lab C} \\ Translating Utility Classes } % Title
+
+\author{\textsc{Mohammadamin Bandali}} % Author name
+
+\date{} % no date
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\begin{center}
+\begin{tabular}{l r}
+Student Number: & XXXXXXXXX \\ 
+Date Performed: & February 10, 2015 \\ % Date the experiment was performed
+Lab Location: & Lassonde 1006 \\ 
+Course Name: & Computer Organization \\ 
+Course Code: & EECS 2021 \\ 
+Course Section: & Z, Lab-02\\ 
+Instructor: & Professor Peter Lian % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+\begin{statement}
+“The work in this report is my own. I have read and understood York University
+academic honesty guidelines and I did not violate Senate Policy on Academic
+Honesty in writing this report.”
+\end{statement}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+
+The purpose of this lab is to become yet more familiar with translation of code from higher level languages (like C or Java) to Assembly, by translating a number of utility classes from Java to Assembly. The student is asked to translate multiple utility classes into Assembly. The student is familiarized with different sections in an Assembly file (i.e. globl, data, text, etc) and their purpose.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Methods and Equipment}
+
+\begin{center}
+\begin{tabular}{l r}
+Computer: & MacBook Air 13-inch, Mid 2013 \\
+CPU: & 1.7GHz dual-core Intel Core i7 \\
+RAM: & 8GB 1600MHz LPDDR3 \\
+Operating System: & Arch GNU/Linux \\
+Kernel Version: & 3.17.6
+\end{tabular}
+\end{center}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Experimental Procedure and Results}
+
+\subsection{LabC1}
+\begin{enumerate}
+\item[8. ] The location of the allocated memory does not necessarily correspond to the order in which it was defined in the program; but instead the value will be allocated at the first location in the data segment that matches the requirements: the alignment rule should be satisfied (depending on the data type) and the value should also fit in the location.
+
+\item[16. ] The expected output is \verb$214748364732$, since we are printing the values of MAX (2147483647) and SIZE (32) one after another.
+
+The actual output is \verb$214748364732$, which is what we predicted.
+
+\item[17. ] The program now outputs:
+\begin{verbatim}
+2147483647
+32
+\end{verbatim}
+
+
+\end{enumerate}
+
+\subsection{LabC2}
+\begin{enumerate}
+\item[19. ] The expected output would be:
+\begin{verbatim}
+2147483647
+-32
+\end{verbatim}
+
+However, the actual output is:
+\begin{verbatim}
+2147483647
+224
+\end{verbatim}
+
+\item[20. ] The value of SIZE is read into \verb#$a0# using the \verb$lbu$ instruction which treats the data as \textit{unsigned} byte, but we want to store $-32$ which is a negative (signed) number. So, the correct instruction to use would be \verb$lb$ which loads the byte normally.
+
+\item[21. ] The reason our instruction was broken into 2 is that in MIPS only 16-bit offsets are allowed. In this case, our memory location is $0x10010000$, and we are trying to access using a 32-bit offset. So, MIPS will break it down and load $upper(0x10010000) = 0x10001 = 4097_{10}$ directly (with an offset of 0).
+
+\item[22. ] This exactly explains the breaking of the instruction into 2 (as was explained in Q21).
+
+\item[23. ] Technically, yes, it could have, but then it would have to take care of storing the current value of that register on the stack and then restoring after it's done with the operations. This would at least take 2 extra instructions, and it's not worth it. Therefore, it used \verb#$1# which is the Assembler temporary register and it's reserved for special purposes (like this).
+\end{enumerate}
+
+\subsection{LabC3}
+\begin{enumerate}
+\item[27. ] Yes, the output, as expected, is the same as before:
+\begin{verbatim}
+2147483647
+-32
+\end{verbatim}
+
+\item[29. ] No, the expected output is $127$. This is because when loading from one byte before \verb$SIZE$, we actually loose the last byte of \verb$SIZE$.
+\end{enumerate}
+
+\subsection{LabC4}
+\begin{enumerate}
+\item[38. ] The reason there was an infinite loop is that the address of \verb$main$ wasn't saved before calling the other function and wasn't restored afterwards. Therefore, \verb$getCount$ kept being called. The fix is to push \verb#$ra# on the stack in the beginning of the function and pop it afterwards.
+\end{enumerate}
+
+\subsection{LabC5}
+\begin{enumerate}
+\item[48. ] Here's a sample run of the program:
+\begin{verbatim}
+2147483647
+32
+0         (getCount, count is initially 0)
+1234      (This is user input, used as parameter when calling setCount)
+1234      (getCount, after calling setCount with given input)
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabC6}
+\begin{enumerate}
+\item[53. ] Here are sample runs of the program with positive, zero and negative values for signum:
+\begin{verbatim}
+2147483647
+32
+0         (getCount, count is initially 0)
+1234      (This is user input, used as parameter when calling setCount)
+1234      (getCount, after calling setCount with given input)
+45        (This is user input, used as parameter when calling signum)
+1         (Output of signum)
+1235      (getCount, after calling signum)
+\end{verbatim}
+\begin{verbatim}
+2147483647
+32
+0         (getCount, count is initially 0)
+645       (This is user input, used as parameter when calling setCount)
+645       (getCount, after calling setCount with given input)
+0         (This is user input, used as parameter when calling signum)
+0         (Output of signum)
+646       (getCount, after calling signum)
+\end{verbatim}
+\begin{verbatim}
+2147483647
+32
+0         (getCount, count is initially 0)
+8476      (This is user input, used as parameter when calling setCount)
+8476      (getCount, after calling setCount with given input)
+-12       (This is user input, used as parameter when calling signum)
+-1        (Output of signum)
+8477      (getCount, after calling signum)
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabC7}
+\begin{enumerate}
+\item[58. ] Here are sample runs of the program (output 1 means prime, 0 means not prime):
+\begin{verbatim}
+4         (This is user input, used as parameter when calling isPrime)
+0         (Output of isPrime)
+\end{verbatim}
+\begin{verbatim}
+13        (This is user input, used as parameter when calling isPrime)
+1         (Output of isPrime)
+\end{verbatim}
+\begin{verbatim}
+123       (This is user input, used as parameter when calling isPrime)
+0         (Output of isPrime)
+\end{verbatim}
+\begin{verbatim}
+113       (This is user input, used as parameter when calling isPrime)
+1         (Output of isPrime)
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabC8}
+\begin{enumerate}
+\item[60. ] Here are sample runs of the program:
+\begin{verbatim}
+123
+1
+2
+3
+\end{verbatim}
+\begin{verbatim}
+34867
+3
+4
+8
+6
+7
+\end{verbatim}
+\end{enumerate}
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{Evaluations and Conclusions}
+I was able to fully and successfully finish the tasks in this lab, although with a lot of hassle.\newline
+
+Doing the \textit{numerous} exercises in this lab helped me sharpen my Assembly skills and now I'm able to translate a very broad range of programs that have multiple methods, separate files, private and global methods from a high level language to Assembly. I understand this is no easy task, and I'm grateful I don't have to write Assembly in my everyday life. Assembly code is much less readable and self-explanatory than a higher level language and it's very easy to make mistakes that are very hard to debug. Single-stepping is an absolute necessity when writing in Assembly by offering insight on the state of code at a certain point in time.
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+
+\section{Source Codes}
+
+
+\subsection{LabC1}
+\lstinputlisting[style=assembly]{LabC1.s}
+\lstinputlisting[style=assembly]{LabC1Client.s}
+
+\subsection{LabC2}
+\lstinputlisting[style=assembly]{LabC2.s}
+\lstinputlisting[style=assembly]{LabC2Client.s}
+
+\subsection{LabC3}
+\lstinputlisting[style=assembly]{LabC3.s}
+\lstinputlisting[style=assembly]{LabC3Client.s}
+\pagebreak
+
+\subsection{LabC4}
+\lstinputlisting[style=assembly]{LabC4.s}
+\lstinputlisting[style=assembly]{LabC4Client.s}
+\pagebreak
+
+\subsection{LabC5}
+\lstinputlisting[style=assembly]{LabC5.s}
+\pagebreak
+\lstinputlisting[style=assembly]{LabC5Client.s}
+\pagebreak
+
+\subsection{LabC6}
+\lstinputlisting[style=assembly]{LabC6.s}
+\pagebreak
+\lstinputlisting[style=assembly]{LabC6Client.s}
+\pagebreak
+
+\subsection{LabC7}
+\lstinputlisting[style=assembly]{LabC7.s}
+\pagebreak
+\lstinputlisting[style=assembly]{LabC7Client.s}
+\pagebreak
+
+\subsection{LabC8}
+\lstinputlisting[style=assembly]{LabC8.s}
+\lstinputlisting[style=assembly]{LabC8Client.s}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

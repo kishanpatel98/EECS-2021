@@ -1,0 +1,434 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Verilog,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  captionpos=b,                   % sets the caption-position to bottom
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
+}
+
+\newenvironment{statement}{\par\vspace{50ex}}{\clearpage}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{\textsc{Lab K} \\ Basic Verilog Programming } % Title
+
+\author{\textsc{Mohammadamin Bandali}} % Author name
+
+\date{} % no date
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\begin{center}
+\begin{tabular}{l r}
+Student Number: & XXXXXXXXX \\ 
+Date Performed: & March 24, 2015 \\ % Date the experiment was performed
+Lab Location: & Lassonde 1006 \\ 
+Course Name: & Computer Organization \\ 
+Course Code: & EECS 2021 \\ 
+Course Section: & Z, Lab-02\\ 
+Instructor: & Professor Peter Lian % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+\begin{statement}
+“The work in this report is my own. I have read and understood York University
+academic honesty guidelines and I did not violate Senate Policy on Academic
+Honesty in writing this report.”
+\end{statement}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+
+The purpose of this lab is to get familiar with the Verilog hardware design language, by doing 9 main tasks each with their own sub-task. By doing this lab the student is familiarized with some of the basic Verilog concepts such as:
+
+\begin{itemize}
+\item modules and their building blocks (\verb$always$ and \verb$initial$ blocks),
+\item variable types (registers and wires),
+\item \verb#$display# statement and output formatting,
+\item reading user input from the standard input, and
+\item getting familiar with thinking about programs in a more hardware-like way, as opposed to software.
+\end{itemize}
+
+The logical gates (\verb$AND$, \verb$OR$, \verb$XOR$, etc) are [re]introduced and students will design simple circuits by combining these gates together.
+In the end, the student will implement a \textit{full adder} given the schematic design of the circuit.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Methods and Equipment}
+
+\begin{center}
+\begin{tabular}{l r}
+Computer: & MacBook Air 13-inch, Mid 2013 \\
+CPU: & 1.7GHz dual-core Intel Core i7 \\
+RAM: & 8GB 1600MHz LPDDR3 \\
+Operating System: & Arch GNU/Linux \\
+Kernel Version: & 3.17.6
+\end{tabular}
+\end{center}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Experimental Procedure and Results}
+
+\subsection{LabK1}
+\begin{enumerate}
+\item[6. ] The output is:
+    \begin{verbatim}
+                   0          x
+                   0          0
+                   0          2
+    \end{verbatim}
+    
+    As mentioned in the lab manual, all statements were executed at the same time, time 0. However, they were executed sequentially (since they were in the \verb$initial$ block).
+
+    \pagebreak
+
+\item[7. ] Using the \verb$%b$ switch in \verb#$display# outputs the number in binary:
+    \begin{verbatim}
+                   0 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                   0 00000000000000000000000000000000
+                   0 00000000000000000000000000000010
+    \end{verbatim}
+
+\item[8. ] Using \verb$%d$ for second output statement and \verb$%h$ for the last output statement, the result is:
+    \begin{verbatim}
+                   0 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                   0          0
+                   0 00000002
+    \end{verbatim}
+    The first line is displayed using binary formatting, second line using decimal and last line using hex.
+
+\item[9. ] The output is:
+    \begin{verbatim}
+time =     0, x = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+time =     0, x = 00000000000000000000000000000000
+time =     0, x = 00000000000000000000000000000010
+    \end{verbatim}
+    Notice the padding (5 white spaces) before each \verb$0$.
+
+\item[10. ] Initializing \verb$x$ as \verb$32'hffff0000$ (a 32-bit integer with the hex value \verb$ffff0000$) results in the following output:
+    \begin{verbatim}
+time =     0, x = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+time =     0, x = 11111111111111110000000000000000
+time =     0, x = 11111111111111110000000000000010
+    \end{verbatim}
+
+\item[11. ] After adding 'one', two and three, and displaying them, the output is:
+    \begin{verbatim}
+time =     0, x = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+time =     0, x = 11111111111111110000000000000000
+time =     0, x = 11111111111111110000000000000010
+one = 0, two = 10, three = 010
+    \end{verbatim}
+
+
+\end{enumerate}
+
+\subsection{LabK2}
+\begin{enumerate}
+\item[12. ] The output is:
+    \begin{verbatim}
+ 0: x=5 y=x z=x
+ 0: x=5 y=6 z=x
+ 0: x=5 y=6 z=7
+    \end{verbatim}
+    We can see that the statements were indeed executed sequentially: \linebreak
+    After assigning x, y and z are still unknown. Then, after assigning y, z is still unknown. And finally, the last \verb#$display# statement shows that all the variables have values. 
+
+\item[13. ] The output after adding delays:
+    \begin{verbatim}
+10: x=5 y=x z=x
+20: x=5 y=6 z=x
+30: x=5 y=6 z=7
+    \end{verbatim}
+    As we can see the statements are still executed sequentially, but now the difference is that because of the delays, the statements are executed at different times (not all at time 0).
+
+\item[14. ] The output indeed changed to what is shown in the lab manual:
+    \begin{verbatim}
+10: x=5 y=x z=x
+20: x=6 y=7 z=x
+30: x=6 y=7 z=8
+    \end{verbatim}
+
+\item[15. ] The new output is:
+    \begin{verbatim}
+10: x=5 y=x y=x
+20: x=5 y=6 y=x
+30: x=5 y=6 y=7
+    \end{verbatim}
+    which is the same as the original one. The reason for this is that the incrementing statement in the second \verb$initial$ block has a delay of 5 and is executed before the first statement of the first block, and for this reason, the value of x is still unknown. Therefore, incrementing unknown wouldn't make sense and doesn't change anything. Then, the first statement of the first block (with delay \#10) is executed and x is set to 5, and the rest is like the original case.
+
+\item[16. ] With a delay of 25, the statement in the second initial block will be executed between the second and third display statement in the first initial block. Hence, the output is:
+    \begin{verbatim}
+10: x=5 y=x z=x
+20: x=5 y=6 z=x
+30: x=6 y=6 z=7
+    \end{verbatim}
+
+\item[17. ] The output will be the same as the original output, since the 35 delay will make the statement execute after the last display command is executed in the first initial block. Therefore, no change is reflected.
+    \begin{verbatim}
+10: x=5 y=x z=x
+20: x=5 y=6 z=x
+30: x=5 y=6 z=7
+    \end{verbatim}
+
+\item[18. ] The output matches the one given in the manual:
+    \begin{verbatim}
+10: x=5 y=x z=x
+20: x=6 y=7 z=x
+30: x=8 y=7 z=8
+    \end{verbatim}
+    Explanation:
+    First, \verb$x = 5$ from the first block is executed and display is called. Then, the body of the loop is executed once and x is incremented. So now, x is 6. Then, the second statement in the first block is executed and y is set to \verb$x+1$ which is 7. Then display is called. Then, x is incremented again (now 7) at time 21 and again at time 28 (now 8). Then z is set to \verb$y+1$ which is 8. Finally, display is called again.
+
+\item[19. ] Using an \verb$always$ block, the output is the same as it was before:
+    \begin{verbatim}
+10: x=5 y=x z=x
+20: x=6 y=7 z=x
+30: x=8 y=7 z=8
+    \end{verbatim}
+
+\item[20. ] Using \verb#$monitor# in an initial block, whenever x, y or z change there will be a new line in the output. The output when using \verb#$monitor# is:
+    \begin{verbatim}
+ 0: x=x y=x z=x
+10: x=5 y=x z=x
+14: x=6 y=x z=x
+20: x=6 y=7 z=x
+21: x=7 y=7 z=x
+28: x=8 y=7 z=x
+30: x=8 y=7 z=8
+    \end{verbatim}
+
+\end{enumerate}
+
+\subsection{LabK3}
+\begin{enumerate}
+\item[23. ] The output shows \verb$z$ for \verb$z$, which means high-impedance (usually treated like \verb$x$):
+\begin{verbatim}
+a=1 b=1 z=z
+\end{verbatim}
+
+\item[26. ] The reason we fail to capture the output of the circuit is that we are displaying it at "time 0". To solve this issue, we will delay the execution of \verb#$display# by putting a \verb$#1$ at the beginning of the line. The output is now as expected:
+\begin{verbatim}
+a=1 b=1 z=0
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabK4}
+\begin{enumerate}
+\item[29. ] The output:
+\begin{verbatim}
+a=0 b=0 z=0
+a=0 b=1 z=0
+a=1 b=0 z=1
+a=1 b=1 z=0
+\end{verbatim}
+The only case where the output of the circuit (\verb$z$) should be $1$ is the case where the first input (\verb$a$) is $1$, and second input (\verb$b$) is $0$ so that the first one \verb$AND$ed with \verb$NOT$ of second one results in $1$.
+
+\item[30. ] The reason we can't use \verb$a$ and \verb$b$ directly is that we've declared them as 1-bit registers and they have a fixed size. However, in our loops, we compare them to $2$ which is $(10)_2$. As we can see, the smallest register size we need for storing 2 is a 2-bit register. So, when we increment $1$, there will be an overflow and $0$ will be stored in the register, and thus the program will get stuck in an infinite loop (the inner loop) since \verb$b$ would never reach $2$. Therefore we need to use \verb$i$ and \verb$j$.
+\end{enumerate}
+
+\subsection{LabK5}
+\begin{enumerate}
+\item[33. ] The automated testing worked as expected:
+\begin{verbatim}
+PASS: a=0 b=0 z=0
+PASS: a=0 b=1 z=0
+PASS: a=1 b=0 z=1
+PASS: a=1 b=1 z=0
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabK6}
+\begin{enumerate}
+\item[35. ] \verb$assign$ was used to connect wires explicitly.
+
+\item[36. ] The output was $1$, as expected:
+\begin{verbatim}
+a=1 b=0 c=0 z=1
+\end{verbatim}
+
+\item[37.] Looking at the first \verb$AND$ gate (the one on the top), if \verb$c=0$, then \verb$NOT c$ will be 1. So, \verb$a AND 1$ will be \verb$a$.
+
+Looking at the second \verb$AND$ gate, if \verb$c=0$, the output of the gate will always be 0.
+
+Looking at the \verb$OR$ gate, one of the inputs is \verb$a$ (first \verb$AND$ gate) and the other input is 0 (second \verb$AND$ gate). The final output is \verb$a OR 0$, which by definition is \verb$a$.
+\end{enumerate}
+
+\subsection{LabK7}
+\begin{enumerate}
+\item[41. ] If the user forgets to specify an argument, the value of the respective argument will be \verb$x$ (unknown).
+
+Example: Calling the program with \verb$vvp a.out +b=0 +c=0$ results in the following output:
+\begin{verbatim}
+a=x b=0 c=0 z=x
+\end{verbatim}
+
+As we can see, \verb$a$ is unknown.
+
+\item[42. ] If an argument is missing, \verb$flag$ will be 0. So, after reading each argument, we can check if the flag is 0 and warn the user.
+
+Example output if users forgets argument \verb$c$:
+\begin{verbatim}
+Warning: argument c is missing.
+a=1 b=0 c=x z=x
+\end{verbatim}
+
+\end{enumerate}
+
+\subsection{LabK8}
+\begin{enumerate}
+\item[44. ] All cases of exhaustive testing are passing:
+\begin{verbatim}
+PASS: a=0 b=0 c=0 z=0
+PASS: a=0 b=0 c=1 z=0
+PASS: a=0 b=1 c=0 z=0
+PASS: a=0 b=1 c=1 z=1
+PASS: a=1 b=0 c=0 z=1
+PASS: a=1 b=0 c=1 z=0
+PASS: a=1 b=1 c=0 z=1
+PASS: a=1 b=1 c=1 z=1
+\end{verbatim}
+
+\item[45. ] If examined closely, we can conclude that if \verb$c=1$ then \verb$z=b$, and if \verb$c=0$ then \verb$z=a$. Therefore, our oracle (\verb$expect$) will be:
+
+\verb$expect = c ? b : a;$
+
+\item[46. ] All tests are passing with the new way of computing the oracle:
+\begin{verbatim}
+PASS: a=0 b=0 c=0 z=0
+PASS: a=0 b=0 c=1 z=0
+PASS: a=0 b=1 c=0 z=0
+PASS: a=0 b=1 c=1 z=1
+PASS: a=1 b=0 c=0 z=1
+PASS: a=1 b=0 c=1 z=0
+PASS: a=1 b=1 c=0 z=1
+PASS: a=1 b=1 c=1 z=
+\end{verbatim}
+\end{enumerate}
+
+\subsection{LabK9}
+\begin{enumerate}
+\item[49. ] Sample runs of the program (\verb#$# is the system prompt):
+
+\begin{verbatim}
+$ vvp a.out +a=1 +b=0 +cin=0
+a=1 b=0 cin=0 z=1 cout=0
+\end{verbatim}
+
+\begin{verbatim}
+$ vvp a.out +a=1 +b=1 +cin=0
+a=1 b=1 cin=0 z=0 cout=1
+\end{verbatim}
+
+\item[51. ] All the cases in the exhaustive test pass:
+\begin{verbatim}
+PASS: a=0 b=0 cin=0 z=0 cout=0
+PASS: a=0 b=0 cin=1 z=1 cout=0
+PASS: a=0 b=1 cin=0 z=1 cout=0
+PASS: a=0 b=1 cin=1 z=0 cout=1
+PASS: a=1 b=0 cin=0 z=1 cout=0
+PASS: a=1 b=0 cin=1 z=0 cout=1
+PASS: a=1 b=1 cin=0 z=0 cout=1
+PASS: a=1 b=1 cin=1 z=1 cout=1
+\end{verbatim}
+\end{enumerate}
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{Evaluations and Conclusions}
+Doing this lab gave me new insight and showed me a new way to think of programs, by blurring the lines between hardware and software. The tasks were very helpful in gradually introducing basic Verilog concepts and getting familiar with the \textit{Verilog way of thinking} about programs/circuits. They were helpful to get my feet wet with designing circuits through \textit{programming}.
+
+I look forward to the future labs to do more sophisticated circuits and ultimately design a simple CPU.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+
+\section{Source Codes}
+
+
+\subsection{LabK1}
+\lstinputlisting[language=verilog]{LabK1.v}
+
+\pagebreak
+
+\subsection{LabK2}
+\lstinputlisting[language=verilog]{LabK2.v}
+
+\pagebreak
+
+\subsection{LabK3}
+\lstinputlisting[language=verilog]{LabK3.v}
+
+\subsection{LabK4}
+\lstinputlisting[language=verilog]{LabK4.v}
+
+\subsection{LabK5}
+\lstinputlisting[language=verilog]{LabK5.v}
+
+\pagebreak
+
+\subsection{LabK6}
+\lstinputlisting[language=verilog]{LabK6.v}
+
+\pagebreak
+
+\subsection{LabK7}
+\lstinputlisting[language=verilog]{LabK7.v}
+
+\pagebreak
+
+\subsection{LabK8}
+\lstinputlisting[language=verilog]{LabK8.v}
+
+\subsection{LabK9}
+\lstinputlisting[language=verilog]{LabK9.v}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
