@@ -1,0 +1,13 @@
+Main:	addi x10, x0, 130			# Store values in x10 and x11
+	addi x11, x0, 15
+
+Loop:	blt x11, x10, Yes			# If x10>x11 jump to Yes
+	sub x11, x11, x10			# Otherwise x11-x10 stored in x11
+	beq x10, x11, Exit			# If x10 = x11 exit
+	jal x0, Loop			# Otherwise return to top of loop
+
+Yes:	sub x10, x10, x11			# x10 - x11 stored in x10
+	beq x10, x11, Exit			# If x10 = x11 exit
+	jal x0, Loop			# Otherwise jump back to loop
+
+Exit:

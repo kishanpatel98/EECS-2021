@@ -1,0 +1,22 @@
+main:
+	addi sp, sp, 1600			# Initialize the stack pointer to 1600
+	addi sp, sp, -8    			# Make room to store x4
+	addi x4, x0, 255			# Store value to x4
+	sd x4, 0(sp)            # Store x4 to stack
+	jal x1, make_even     
+	ld x4, 0(sp)      			# Lode value from stack into x4
+	addi sp, sp, 8          # Pop the stack
+	
+ORG 96
+make_even:
+	addi x6, x0, 2			# Local variable used to devide by 2
+	rem x7, x4, x6			# Remainder after dividing by 2 (check if even or odd)
+
+	beq x7, x0, else			# If even jump to else
+	addi x4, x4, -1			# Otherwise add -1 (subtract 1) from x4
+	sd x4, 0(sp) 			# Store new x4 value to stack
+
+	jalr x0, 0(x1)			# Return to stack pointer
+
+else: 
+	jalr x0, 0(x1)			# Return to stack pointer
